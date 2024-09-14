@@ -2,8 +2,6 @@
 
 This repository is an implementation of a **distributed system** that executes multiple Python scripts in parallel, colleclts results, and performs post-task processes like packaging the outputs.
 
-The system is designed to handle multiple Python scripts efficiently via multiprocessing which reduces total execution time
-
 ## How It Works
 1. **Task Distribution**: The ``BuildServer`` class scans the directory (``python_source/``) for Python scripts (``.py`` files). Each script is queued and processed by worker processes running in parallel.
 2. **Parallel Execution**: Each script is executed in its own process, with its execution time being reocrded and stored in a result queue
@@ -11,12 +9,6 @@ The system is designed to handle multiple Python scripts efficiently via multipr
 4. **Result Collection**: All results are collected from the result queue (execution success and time taken for each individual script).
 
 The system also includes **error handling** if one occurs during script execution (e.g. syntax errors or ``subprocess.CalledProcessError``), the error is logged in the result queue. 
-
-## Key Features
-- **Parallel execution** using Python's `multiprocessing` library
-- **Individual bechmarks** for each script's execution time
-- **Automatic packaging** of output files into a ZIP archive
-- Can be scaled with multiple workers
 
 ## File Structure
 ```bash
