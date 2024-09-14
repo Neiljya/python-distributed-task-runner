@@ -1,6 +1,6 @@
 # Python Distributed Task Runner
 
-This repository is an implementation of a **distributed system** that executes multiple Python scripts in parallel, colleclts results, and performs post-task processes like packaging the outputs.
+This repository is an implementation of a **distributed system** that executes multiple Python scripts in parallel, collects results, and performs post-task processes like packaging the outputs.
 
 ## How It Works
 1. **Task Distribution**: The ``BuildServer`` class scans the directory (``python_source/``) for Python scripts (``.py`` files). Each script is queued and processed by worker processes running in parallel.
