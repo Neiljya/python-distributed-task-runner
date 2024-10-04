@@ -17,13 +17,10 @@ class BuildServer:
     # Start worker processes to handle execution and post-processing
     def start_workers(self):
         workers = []
-
-        # Execute all Python scripts within a single step
         p = multiprocessing.Process(target=execute_files, args=(self.source_dir, self.output_dir, self.result_queue))
         workers.append(p)
         p.start()
 
-        # After executing, parallelize post-process steps
         for i in range(self.num_workers):
             p = multiprocessing.Process(target=post_task_processing, args=(self.task_queue, self.result_queue, self.output_dir))
             workers.append(p)
