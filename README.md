@@ -8,17 +8,6 @@
 
 The system also includes **error handling** if one occurs during script execution (e.g. syntax errors or ``subprocess.CalledProcessError``), the error is logged in the result queue. 
 
-## File Structure
-```bash
-├── python_source/         # Directory containing the test scripts for distributed execution
-│   ├── Prime.py           # Test script for prime number calculation
-│   ├── Matrix.py          # Test script for matrix multiplication
-│   └── Fibonacci.py       # Test script for Fibonacci sequence generation  
-├── main.py                # Distributed system for parallel script execution
-├── individual_test.py     # Test for sequential execution of all methods in the source folder
-└── README.md              # Documentation
-```
-
 ## Testing Parameters
 The following parameters were used for testing:
 - **Prime Calculation**: ```primes = calculate_primes(2000000)```
@@ -67,8 +56,3 @@ Total Execution Time: 10.24s
 - **Total Execution Time (Individual Test): 19.08s**
 - **Total Execution Time (Distributed System): 10.24s**
 
-As seen from the test results, the distributed system achieves a **47% reduction in execution time**
-
-## Potential Improvements & TODOs
-The system, while improving execution time, can definitely be improved through various methods that I plan on experimenting on in the future such as:
-**batch processing** for more complex tasks or **prioritizing tasks** so more time-sensitive tasks should be executed first.
