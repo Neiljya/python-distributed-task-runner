@@ -14,13 +14,14 @@ class BuildServer:
         self.task_queue = multiprocessing.Queue()
         self.result_queue = multiprocessing.Queue()
 
-    # Start worker processes to handle execution and post-processing
+    # Start worker processes to handle execution
     def start_workers(self):
         workers = []
         p = multiprocessing.Process(target=execute_files, args=(self.source_dir, self.output_dir, self.result_queue))
         workers.append(p)
         p.start()
-
+        
+        # Do some post-processing (add files to queue, zip files, put in output directory)
         for i in range(self.num_workers):
             p = multiprocessing.Process(target=post_task_processing, args=(self.task_queue, self.result_queue, self.output_dir))
             workers.append(p)
@@ -37,15 +38,13 @@ class BuildServer:
             result = self.result_queue.get()
             print(result)
 
-# Function to execute all Python files in the source directory
 def execute_files(source_dir, output_dir, result_queue):
     try:
-        # Execute all Python files
         python_files = [f for f in os.listdir(source_dir) if f.endswith('.py')]
 
         for python_file in python_files:
             start_time = time.time()
-
+            
             execute_command = f"python {os.path.join(source_dir, python_file)}"
             subprocess.run(execute_command, shell=True, check=True)
 
@@ -55,7 +54,7 @@ def execute_files(source_dir, output_dir, result_queue):
     except subprocess.CalledProcessError as e:
         result_queue.put(f"Execution Failed: {str(e)}")
 
-# Handle post-task processes in parallel
+# Handle post-task processes (called in start_workers() after all workers are finished executing files)
 def post_task_processing(task_queue, result_queue, output_dir):
     while True:
         try:
@@ -87,20 +86,21 @@ if __name__ == "__main__":
     start_time = time.time()
 
     # Setting up a BuildServer with 2 workers
+    ######### RUNNING BUILDSERVER ###########
     build_server = BuildServer(source_dir, output_dir, num_workers=2)
 
     build_server.start_workers()
     build_server.task_queue.put("package")
     build_server.collect_results()
+    #########################################
 
-    # Measure execution time
+    
     execution_time = time.time() - start_time
     print(f"Execution Time: {execution_time:.2f}s")
 
     # Record packaging start time
     packaging_start_time = time.time()
 
-    # Perform packaging
     package(output_dir, zip_name)
 
     # Measure packaging time
